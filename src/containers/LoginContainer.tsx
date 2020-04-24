@@ -5,7 +5,7 @@ import { IconButton, Avatar } from '@material-ui/core';
 import { AccountCircle as AccountCircleIcon } from '@material-ui/icons';
 import EventListener from 'react-event-listener';
 import * as api from '@/utils/api';
-import * as AlertModal from '@/components/AlertModal';
+import { useAlert } from '@/components/Alert';
 import Login, { ILoginHandles } from '@/components/Login';
 
 import { ICombinedState } from '@/reducers';
@@ -44,6 +44,7 @@ const LoginContainer = React.forwardRef<ILoginContainerHandles, {}>(
     const intl = useIntl();
     const dispatch = useDispatch();
     const loginRef = React.useRef<ILoginHandles>(null);
+    const makeAlert = useAlert();
 
     React.useEffect(() => {
       const authData = api.getAuth();
@@ -67,7 +68,7 @@ const LoginContainer = React.forwardRef<ILoginContainerHandles, {}>(
       const password = loginRef.current?.getPassword();
 
       if (username === '') {
-        return AlertModal.make(
+        return makeAlert(
           'error',
           intl.formatMessage({
             id: 'pixiv ID or Email Address is Blank'
@@ -76,7 +77,7 @@ const LoginContainer = React.forwardRef<ILoginContainerHandles, {}>(
       }
 
       if (password === '') {
-        return AlertModal.make(
+        return makeAlert(
           'error',
           intl.formatMessage({ id: 'Password is Blank' })
         );
@@ -90,28 +91,25 @@ const LoginContainer = React.forwardRef<ILoginContainerHandles, {}>(
           password
         })
         .then((data: any) => {
-          if (data.status === 'success') {
-            const authData = data.response;
-            api.setAuth(authData, dispatch);
-            setAuthData(authData);
-            setTimeout(() => {
-              close();
-              loginRef.current?.reset();
-            }, 1500);
-          } else {
-            AlertModal.make('error', data.message);
-          }
+          const authData = data.response;
+          api.setAuth(authData, dispatch);
+          setAuthData(authData);
+          setTimeout(() => {
+            close();
+            loginRef.current?.reset();
+          }, 1500);
         })
         .then(() => {
           setIsSubmitting(false);
         })
-        .catch(() => {
+        .catch(err => {
           setIsSubmitting(false);
-          AlertModal.make(
+          makeAlert(
             'error',
-            intl.formatMessage({
-              id: 'Communication Error Occurred'
-            })
+            err.message ||
+              intl.formatMessage({
+                id: 'Communication Error Occurred'
+              })
           );
         });
     };

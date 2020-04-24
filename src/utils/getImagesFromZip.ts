@@ -3,10 +3,11 @@ import honoka from 'honoka';
 
 export default function getImagesFromZip(zipURL: string) {
   return new Promise(resolve => {
-    honoka
-      .get(zipURL, {
-        dataType: 'blob'
-      })
+    honoka(zipURL, {
+      dataType: 'blob',
+      ignoreInterceptors: true
+    })
+      .then(response => response.data)
       .then(JSZip.loadAsync)
       .then(zip => {
         const re = /(.jpg|.png|.gif|.ps|.jpeg)$/;

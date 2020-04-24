@@ -28,7 +28,7 @@ import config from '@/config';
 
 import * as IllustActions from '@/actions/illust';
 import * as GalleryActions from '@/actions/gallery';
-import * as AlertModal from '@/components/AlertModal';
+import { useAlert } from '@/components/Alert';
 import Comment from '@/components/Comment';
 import GifPlayer from '@/components/GifPlayer';
 import InfiniteScroll from '@/components/InfiniteScroll';
@@ -165,16 +165,13 @@ const IllustContainer: React.FunctionComponent<{}> = () => {
 
   const { illustId } = useParams<IIllustContainerRouteInfo>();
   const loginRef = React.useRef<ILoginContainerHandles>(null);
+  const makeAlert = useAlert();
 
   const fetchBookmark = () => {
     api
       .illustBookmarkDetail(illustId)
       .then(data => {
-        if (data.status === 'success') {
-          setIsBookmarked(
-            data.response?.bookmark_detail?.is_bookmarked ?? false
-          );
-        }
+        setIsBookmarked(data.response?.bookmark_detail?.is_bookmarked ?? false);
       })
       .catch(() => {});
   };
@@ -204,21 +201,19 @@ const IllustContainer: React.FunctionComponent<{}> = () => {
     }
 
     setIsSubmitting(true);
-    api[!isBookmarked ? 'illustBookmarkAdd' : 'illustBookmarkDelete'](
-      illustId
-    ).then(data => {
-      if (data.status === 'success') {
+    api[!isBookmarked ? 'illustBookmarkAdd' : 'illustBookmarkDelete'](illustId)
+      .then(() => {
         setIsSubmitting(false);
         setIsBookmarked(!isBookmarked);
-      } else {
-        AlertModal.make(
+      })
+      .catch(() => {
+        makeAlert(
           'error',
           intl.formatMessage({
             id: 'Communication Error Occurred'
           })
         );
-      }
-    });
+      });
   };
 
   const onImageClick = (index: number) => {

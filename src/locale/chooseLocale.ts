@@ -1,11 +1,11 @@
-import Storage from '../utils/Storage';
+import * as storage from '../utils/storage';
 import * as config from '../config';
 
 const chooseLocale = (
   language: string,
   setLocaleFunc?: (data: { lang: string; messages: any }) => void
 ) => {
-  const cachedLang = Storage.get('lang');
+  const cachedLang = storage.getLang();
   let lang;
 
   if (!cachedLang) {
@@ -25,7 +25,7 @@ const chooseLocale = (
 
   const messages = found.messages;
 
-  Storage.set('lang', isFallback ? 'ja' : lang);
+  storage.setLang(isFallback ? 'ja' : lang);
 
   const settedLocale = {
     lang: isFallback ? 'ja' : lang,

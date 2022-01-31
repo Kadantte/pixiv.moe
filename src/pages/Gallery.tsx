@@ -31,8 +31,7 @@ import SearchInput, {
   SearchInputHandles
 } from '../components/SearchInput';
 
-import Storage from '../utils/Storage';
-import * as api from '../utils/api';
+import * as storage from '../utils/storage';
 
 import LayoutContainer, {
   LayoutContainerHandles
@@ -61,7 +60,7 @@ const Gallery: React.FC<{}> = () => {
   const [shouldLogin] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchOptions, setSearchOptions] = useState<SearchOptions>({
-    xRestrict: Storage.get('x_restrict') || false
+    xRestrict: storage.getXRestrict() || false
   });
   const layoutRef = useRef<LayoutContainerHandles>(null);
   const inputRef = useRef<SearchInputHandles>(null);
@@ -101,11 +100,11 @@ const Gallery: React.FC<{}> = () => {
     if (!isNaN(parseFloat(word)) && isFinite(Number(word))) {
       history.push(`/illust/${word}`);
     } else {
-      if (!api.getPremiumKey() && searchOptions.xRestrict && checkPremium) {
+      if (!storage.getPremiumKey() && searchOptions.xRestrict && checkPremium) {
         layoutRef.current?.openLogin();
         return;
       }
-      Storage.set('word', word);
+      storage.setWord(word);
       gallery.clearErrorTimes();
       gallery.clearSource();
       gallery.setWord(word);
@@ -115,7 +114,7 @@ const Gallery: React.FC<{}> = () => {
   };
 
   const onSearchOptionsChange = (options: SearchOptions) => {
-    Storage.set('x_restrict', options.xRestrict);
+    storage.setXRestrict(options.xRestrict);
     setSearchOptions(options);
   };
 
@@ -127,7 +126,7 @@ const Gallery: React.FC<{}> = () => {
       inputRef.current?.setValue('');
     }
     refreshContent();
-    Storage.set('word', word);
+    storage.setWord(word);
   };
 
   useMount(() => {
@@ -140,7 +139,7 @@ const Gallery: React.FC<{}> = () => {
     // }
     // setShouldLogin(false);
 
-    const word = Storage.get('word');
+    const word = storage.getWord();
     if (word && word !== 'ranking') {
       inputRef.current?.setValue(word);
     }
@@ -152,9 +151,9 @@ const Gallery: React.FC<{}> = () => {
       const search = new URLSearchParams(location.search);
       if (search.get('entry') === 'ranking') {
         gallery.setWord('ranking');
-        Storage.set('word', 'ranking');
+        storage.setWord('ranking');
       } else {
-        const cachedWord = Storage.get('word');
+        const cachedWord = storage.getWord();
         gallery.setWord(cachedWord ? cachedWord : 'ranking');
       }
       if (gallery.items.length === 0) {

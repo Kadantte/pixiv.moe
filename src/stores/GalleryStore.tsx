@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import { observable } from 'mobx';
 import { useLocalStore } from 'mobx-react-lite';
 import * as api from '../utils/api';
-import Storage from '../utils/Storage';
+import * as storage from '../utils/storage';
 
 export const createStore = () => {
   const store = observable({
@@ -29,7 +29,7 @@ export const createStore = () => {
         const data =
           store.word === 'ranking'
             ? await api.ranking(store.page)
-            : api.getPremiumKey()
+            : storage.getPremiumKey()
             ? await api.searchPremium({
                 word: store.word,
                 page: store.page,
@@ -63,7 +63,7 @@ export const createStore = () => {
       store.isFetchingTags = true;
       try {
         const data = await api.tags({
-          lang: Storage.get('lang')
+          lang: storage.getLang()
         });
         if (data.response.tags) {
           store.tags = data.response.tags;

@@ -12,6 +12,7 @@ import { IconButton, Avatar } from '@mui/material';
 import { AccountCircle as AccountCircleIcon } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import * as api from '../utils/api';
+import * as storage from '../utils/storage';
 import { useAlert } from '../components/Alert';
 import Login, { LoginHandles } from '../components/Login';
 
@@ -55,7 +56,7 @@ const LoginContainer = forwardRef<LoginContainerHandles, {}>((props, ref) => {
 
   useMount(() => {
     const authData = api.getAuth();
-    const premiumKey = api.getPremiumKey();
+    const premiumKey = storage.getPremiumKey();
     if (authData?.access_token) {
       loginRef.current?.setAuthToken(authData.access_token);
     }
@@ -172,7 +173,7 @@ const LoginContainer = forwardRef<LoginContainerHandles, {}>((props, ref) => {
       try {
         await api.validatePremiumKey(premiumKey);
         setIsSubmitting(false);
-        api.setPremiumKey(premiumKey);
+        storage.setPremiumKey(premiumKey);
         setTimeout(() => {
           close();
           loginRef.current?.reset();

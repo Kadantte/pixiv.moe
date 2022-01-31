@@ -5,7 +5,7 @@ import { useKeyPress } from 'ahooks';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useIntl } from 'react-intl';
-import * as api from '../utils/api';
+import * as storage from '../utils/storage';
 
 const useStyles = makeStyles({
   searchRoot: {
@@ -146,7 +146,7 @@ const SearchInput = forwardRef<SearchInputHandles, SearchInputProps>(
               />
             }
             label={
-              api.getPremiumKey()
+              storage.getPremiumKey()
                 ? 'R-18'
                 : intl.formatMessage({ id: 'R-18 Premium' })
             }

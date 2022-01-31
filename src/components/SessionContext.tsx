@@ -6,7 +6,7 @@ import supportsWebP from 'supports-webp';
 import Loading from './Loading';
 import Message from './Message';
 import * as api from '../utils/api';
-import Storage from '../utils/Storage';
+import * as storage from '../utils/storage';
 
 const useStyles = makeStyles({
   loading: {
@@ -31,13 +31,13 @@ const SessionContext: React.FC<{}> = props => {
 
   useAsyncEffect(async () => {
     try {
-      const premiumKey = api.getPremiumKey();
+      const premiumKey = storage.getPremiumKey();
       const data = await api.session({ premium_key: premiumKey });
       setToken(data.response.access_token);
       if (!data.response.premium) {
-        api.removePremiumKey();
+        storage.removePremiumKey();
       }
-      Storage.set('token', data.response.access_token);
+      storage.setToken(data.response.access_token);
       api.refreshToken();
       setLoading(false);
       if (await supportsWebP) {

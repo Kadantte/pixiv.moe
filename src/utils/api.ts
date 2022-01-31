@@ -1,6 +1,6 @@
 import honoka from 'honoka';
 import * as config from '../config';
-import Storage from './Storage';
+import * as storage from './storage';
 
 interface PixivResponse {
   [key: string]: any;
@@ -18,14 +18,14 @@ honoka.defaults.baseURL = config.apiBaseURL;
 honoka.defaults.timeout = 60e3;
 
 export const getAuth = () => {
-  return Storage.get('auth');
+  return storage.getAuth();
 };
 
 export const setAuth = (authData: any, setAuthFunc?: (data: any) => void) => {
   if (setAuthFunc) {
     setAuthFunc(authData);
   }
-  return Storage.set('auth', authData);
+  return storage.setAuth(authData);
 };
 
 export const removeAuth = (setAuthFunc?: (data: any) => void) => {
@@ -33,19 +33,7 @@ export const removeAuth = (setAuthFunc?: (data: any) => void) => {
     setAuthFunc(null);
   }
 
-  return Storage.remove('auth');
-};
-
-export const getPremiumKey = () => {
-  return Storage.get('premium_key');
-};
-
-export const setPremiumKey = (premiumKey: string) => {
-  return Storage.set('premium_key', premiumKey);
-};
-
-export const removePremiumKey = () => {
-  return Storage.remove('premium_key');
+  return storage.removeAuth();
 };
 
 honoka.interceptors.register({
@@ -55,8 +43,8 @@ honoka.interceptors.register({
         getAuth()?.access_token
       }`;
     }
-    if (Storage.get('token')) {
-      options.headers.Authorization = `Uid ${Storage.get('token')}`;
+    if (storage.getToken()) {
+      options.headers.Authorization = `Uid ${storage.getToken()}`;
     }
     return options;
   },

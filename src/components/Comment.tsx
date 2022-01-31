@@ -1,7 +1,7 @@
 import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { Img } from 'react-image';
-import EmojiParser from '../utils/EmojiParser';
+import { parseEmoji } from '../utils/emojiParser';
 import * as api from '../utils/api';
 
 const useStyles = makeStyles({
@@ -104,7 +104,7 @@ const Comment: React.FC<CommentProps> = ({ item }) => {
           <span
             className={classes.content}
             dangerouslySetInnerHTML={{
-              __html: EmojiParser.parse(item.one_comment_comment)
+              __html: parseEmoji(item.one_comment_comment)
             }}
           />
         </span>

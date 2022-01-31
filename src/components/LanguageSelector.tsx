@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import { useObserver } from 'mobx-react-lite';
 import shortid from 'shortid';
 import * as config from '../config';
-import Storage from '../utils/Storage';
+import * as storage from '../utils/storage';
 import chooseLocale from '../locale/chooseLocale';
 import { LocaleContext } from '../stores/LocaleStore';
 
@@ -29,7 +29,7 @@ const LanguageSelector: React.FC<{}> = () => {
   const lang = locale.lang;
 
   const onLanguageClick = (value: string) => {
-    Storage.set('lang', value);
+    storage.setLang(value);
     chooseLocale(value, locale.setLocale);
   };
 

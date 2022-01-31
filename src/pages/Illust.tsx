@@ -11,12 +11,14 @@ import {
   FavoriteBorder as FavoriteBorderIcon,
   Cached as CachedIcon
 } from '@mui/icons-material';
+import { grey } from '@mui/material/colors';
 import shortid from 'shortid';
 import { Img } from 'react-image';
 import { useIntl } from 'react-intl';
 import { useObserver } from 'mobx-react-lite';
 import dayjs from 'dayjs';
 import useMetaTags from 'react-metatags-hook';
+import BrokenImage from '@mui/icons-material/BrokenImage';
 
 import { useAlert } from '../components/Alert';
 import Comment from '../components/Comment';
@@ -76,6 +78,13 @@ const useStyles = makeStyles({
       '@media screen and (max-width: 1024px) and (orientation: landscape)': {
         width: '100%'
       }
+    },
+    '& svg': {
+      display: 'block',
+      marginTop: 0,
+      marginRight: 'auto',
+      marginBottom: 10,
+      marginLeft: 'auto'
     }
   },
   caption: {
@@ -323,6 +332,11 @@ const Illust: React.FC<{}> = () => {
               api.proxyImage(elem.image_urls.medium)
             ]}
             loader={<Loading />}
+            unloader={
+              <BrokenImage
+                style={{ width: 48, height: 48, color: grey[300] }}
+              />
+            }
             onClick={() => onImageClick(index)}
           />
         );
@@ -400,8 +414,8 @@ const Illust: React.FC<{}> = () => {
                   key={shortid.generate()}
                   className={classes.tagItem}
                   avatar={<Avatar>#</Avatar>}
-                  label={elem.name}
-                  onClick={() => onTagClick(elem.name)}
+                  label={elem.name || elem || 'N/A'}
+                  onClick={() => onTagClick(elem.name || elem || 'N/A')}
                   clickable
                 />
               );

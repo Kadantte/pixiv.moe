@@ -113,7 +113,6 @@
     "inobounce": "^0.2.0",
     "is-mobile": "^3.0.0",
     "jszip": "^3.7.1",
-    "material-ui-image": "^3.2.2",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.6",
     "react": "~17.0.2",

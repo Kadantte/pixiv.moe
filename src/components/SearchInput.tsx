@@ -1,5 +1,11 @@
-import React, { useRef, useImperativeHandle, forwardRef } from 'react';
-import { useMount } from 'ahooks';
+import React, {
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef
+} from 'react';
+import { useMount, useClickAway } from 'ahooks';
+import classNames from 'classnames';
 import makeStyles from '@mui/styles/makeStyles';
 import { useKeyPress } from 'ahooks';
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -16,14 +22,6 @@ const useStyles = makeStyles({
     borderRadius: 2,
     '&:hover': {
       background: 'rgba(255, 255, 255, 0.25)'
-    },
-    '&:focus-within $searchInput': {
-      '@media screen and (min-width: 650px)': {
-        width: 220
-      }
-    },
-    '&:focus-within $searchOptionCheckbox': {
-      display: 'block'
     }
   },
   search: {
@@ -52,6 +50,11 @@ const useStyles = makeStyles({
     verticalAlign: 'middle',
     transition: 'width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
   },
+  searchInputOpen: {
+    '@media screen and (min-width: 650px)': {
+      width: 220
+    }
+  },
   searchOptionCheckbox: {
     position: 'absolute',
     background: '#fff',
@@ -62,6 +65,9 @@ const useStyles = makeStyles({
     boxShadow:
       '0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)',
     zIndex: 99
+  },
+  searchOptionCheckboxOpen: {
+    display: 'block'
   }
 });
 
@@ -85,8 +91,10 @@ const SearchInput = forwardRef<SearchInputHandles, SearchInputProps>(
   (props, ref) => {
     const classes = useStyles();
     const intl = useIntl();
+    const searchRootRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const switchRef = useRef<HTMLButtonElement>(null);
+    const [open, setOpen] = useState(false);
 
     useMount(() => {
       if (props.searchOptions.xRestrict) {
@@ -98,6 +106,10 @@ const SearchInput = forwardRef<SearchInputHandles, SearchInputProps>(
       if (inputRef.current) {
         props.onSearch(inputRef.current.value);
       }
+    };
+
+    const onFocus = () => {
+      setOpen(true);
     };
 
     const onSwitchChange = (
@@ -113,12 +125,19 @@ const SearchInput = forwardRef<SearchInputHandles, SearchInputProps>(
       'enter',
       () => {
         inputRef?.current?.blur();
+        setOpen(false);
         onSearch();
       },
       {
         target: inputRef.current
       }
     );
+
+    useClickAway(() => {
+      if (open) {
+        setOpen(false);
+      }
+    }, searchRootRef);
 
     useImperativeHandle(ref, () => ({
       setValue: (value: string) => {
@@ -129,12 +148,23 @@ const SearchInput = forwardRef<SearchInputHandles, SearchInputProps>(
     }));
 
     return (
-      <div className={classes.searchRoot}>
+      <div ref={searchRootRef} className={classes.searchRoot}>
         <div className={classes.search}>
           <SearchIcon />
         </div>
-        <input ref={inputRef} className={classes.searchInput} />
-        <div className={classes.searchOptionCheckbox}>
+        <input
+          ref={inputRef}
+          className={classNames({
+            [classes.searchInput]: true,
+            [classes.searchInputOpen]: open
+          })}
+          onFocus={onFocus}
+        />
+        <div
+          className={classNames({
+            [classes.searchOptionCheckbox]: true,
+            [classes.searchOptionCheckboxOpen]: open
+          })}>
           <FormControlLabel
             style={{ marginLeft: 0 }}
             control={

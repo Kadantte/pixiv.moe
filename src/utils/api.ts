@@ -69,10 +69,8 @@ export const validatePremiumKey = (premiumKey: string) =>
 export const channels = () =>
   honoka.get('/v2/channels') as Promise<PixivResponse>;
 
-export const tags = (data: { lang: string }) =>
-  honoka.get('/v2/trending/tags', {
-    data
-  }) as Promise<PixivResponse>;
+export const tags = () =>
+  honoka.get('/v2/trending/tags') as Promise<PixivResponse>;
 
 export const ranking = (page: number) =>
   honoka.get('/v2/ranking', {

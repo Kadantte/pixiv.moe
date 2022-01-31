@@ -32,6 +32,7 @@ import LayoutContainer, {
 } from '../containers/LayoutContainer';
 
 import * as api from '../utils/api';
+import * as storage from '../utils/storage';
 import Social from '../utils/Social';
 
 import { GalleryContext } from '../stores/GalleryStore';
@@ -247,6 +248,7 @@ const Illust: React.FC<{}> = () => {
 
   const onTagClick = (tag: string) => {
     gallery.setWord(tag);
+    storage.setWord(tag);
     gallery.setFromIllust(true);
     history.push('/');
   };

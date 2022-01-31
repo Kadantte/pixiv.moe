@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { useIntl } from 'react-intl';
-import useAsyncEffect from 'use-async-effect';
+import { useAsyncEffect } from 'ahooks';
 import supportsWebP from 'supports-webp';
 import Loading from './Loading';
 import Message from './Message';

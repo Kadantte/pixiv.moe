@@ -62,9 +62,7 @@ export const createStore = () => {
     async fetchTags() {
       store.isFetchingTags = true;
       try {
-        const data = await api.tags({
-          lang: storage.getLang()
-        });
+        const data = await api.tags();
         if (data.response.tags) {
           store.tags = data.response.tags;
         }

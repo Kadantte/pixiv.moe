@@ -22,6 +22,8 @@ export default {
   Nickname: '별명',
   'An error occurred. Check the URL or wait for a while and access again.':
     '오류가 발생하였습니다. URL을 확인하거나 잠시 기다렸다가 다시 액세스하십시오.',
+  'Request failed, please try again later':
+    '요청에 실패했습니다. 나중에 다시 시도해 주세요',
   'Failed to Load': '불러 오지 못했습니다',
   Tags: '태그',
   'Redirecting to pixiv.net': 'pixiv.net으로 리디렉션',

@@ -21,6 +21,8 @@ export default {
   Nickname: 'ชื่อเล่น',
   'An error occurred. Check the URL or wait for a while and access again.':
     'เกิดข้อผิดพลาด. ตรวจสอบ URL หรือ รอซักครู่แล้วลองใหม่อีกครั้ง',
+  'Request failed, please try again later':
+    'คำขอล้มเหลว โปรดลองอีกครั้งในภายหลัง',
   'Failed to Load': 'โหลดไม่สำเร็จ',
   Tags: 'แท็ก',
   'Redirecting to pixiv.net': 'กำลังนำทางสู่ pixiv.net',

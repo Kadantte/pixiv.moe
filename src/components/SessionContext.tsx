@@ -25,7 +25,7 @@ const SessionContext: React.FC<{}> = props => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(
     intl.formatMessage({
-      id: 'This page is not available in your area'
+      id: 'Request failed, please try again later'
     })
   );
 
@@ -69,7 +69,7 @@ const SessionContext: React.FC<{}> = props => {
     return <>{props.children}</>;
   }
 
-  let code = 403;
+  let code = 400;
   const messageStart = String(message).substr(0, 3);
   if (/^\d+$/.test(messageStart)) {
     code = Number(messageStart);

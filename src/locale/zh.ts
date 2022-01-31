@@ -21,6 +21,7 @@ export default {
   Nickname: '昵称',
   'An error occurred. Check the URL or wait for a while and access again.':
     '发生了一个错误，请检查链接或稍等一会儿再访问',
+  'Request failed, please try again later': '请求失败，请稍后再访问',
   'Failed to Load': '加载失败',
   Tags: '标签',
   'Redirecting to pixiv.net': '正在跳转到pixiv.net',

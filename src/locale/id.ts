@@ -21,6 +21,8 @@ export default {
   Nickname: 'Nama panggilan',
   'An error occurred. Check the URL or wait for a while and access again.':
     'Terjadi kesalahan. Periksa URL atau tunggu beberapa saat dan akses lagi.',
+  'Request failed, please try again later':
+    'Permintaan gagal, silakan coba lagi nanti',
   'Failed to Load': 'Gagal untuk memuat',
   Tags: 'Tags',
   'Redirecting to pixiv.net': 'Mengarahkan ke pixiv.net',

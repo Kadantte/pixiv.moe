@@ -21,6 +21,8 @@ export default {
   Nickname: 'Nickname',
   'An error occurred. Check the URL or wait for a while and access again.':
     'An error occurred. Check the URL or wait for a while and access again.',
+  'Request failed, please try again later':
+    'Request failed, please try again later',
   'Failed to Load': 'Failed to Load',
   Tags: 'Tags',
   'Redirecting to pixiv.net': 'Redirecting to pixiv.net',

@@ -22,6 +22,8 @@ export default {
   Nickname: 'ニックネーム',
   'An error occurred. Check the URL or wait for a while and access again.':
     'エラーが発生しました。URLを確認するか、しばらく時間を置いて再度アクセスしてください。',
+  'Request failed, please try again later':
+    'リクエストに失敗しました。しばらくしてからもう一度お試しください',
   'Failed to Load': '読み込みに失敗しました',
   Tags: 'タグ',
   'Redirecting to pixiv.net': 'あなたはpixiv.netへリダイレクトしています',

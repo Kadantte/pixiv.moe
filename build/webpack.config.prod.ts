@@ -1,16 +1,15 @@
-/* eslint prefer-arrow-callback: 0 */
 import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
-import HtmlWebpackPlugin = require('html-webpack-plugin');
-import SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-import ManifestPlugin = require('webpack-manifest-plugin');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { GenerateSW } from 'workbox-webpack-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
 const config: webpack.Configuration = {
   mode: 'production',
-  entry: ['@babel/polyfill', 'url-search-params-polyfill', './src/index.tsx'],
+  entry: ['url-search-params-polyfill', './src/index.tsx'],
   cache: false,
   module: {
     rules: [
@@ -22,7 +21,6 @@ const config: webpack.Configuration = {
     ]
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new HtmlWebpackPlugin({
@@ -38,15 +36,12 @@ const config: webpack.Configuration = {
         processConditionalComments: true
       }
     }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'pixiv-moe-app',
-      filename: 'service-worker.js',
-      minify: true,
+    new GenerateSW({
       navigateFallback: '/index.html',
-      navigateFallbackWhitelist: [/^(?!\/__).*/],
-      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/]
+      navigateFallbackAllowlist: [/^(?!\/__).*/],
+      exclude: [/\.map$/, /asset-manifest\.json$/]
     }),
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
       fileName: 'asset-manifest.json'
     }),
     new BundleAnalyzerPlugin({
@@ -55,15 +50,15 @@ const config: webpack.Configuration = {
       openAnalyzer: false,
       generateStatsFile: false
     }),
-    function () {
-      // eslint-disable-next-line
-      this.plugin('done', function () {
+    function (this: webpack.Compiler) {
+      this.hooks.done.tapPromise('gh-404-plugin', () => {
         const htmlFileName = '/../dist/index.html';
         const htmlFilePath = path.join(__dirname, htmlFileName);
         fs.writeFileSync(
           htmlFilePath.replace('index', '404'),
           fs.readFileSync(htmlFilePath).toString()
         );
+        return Promise.resolve();
       });
     }
   ]

@@ -1,33 +1,25 @@
 import path from 'path';
 import webpack from 'webpack';
-import HtmlWebpackPlugin = require('html-webpack-plugin');
-import OpenBrowserPlugin = require('open-browser-webpack-plugin');
+import 'webpack-dev-server';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 const config: webpack.Configuration = {
   mode: 'development',
+  stats: 'errors-only',
   devServer: {
-    contentBase: './src/',
     historyApiFallback: true,
-    inline: true,
     port: 23333,
-    host: '0.0.0.0',
-    publicPath: '/',
-    noInfo: false,
+    // host: '0.0.0.0',
     hot: true,
-    stats: {
-      colors: true
-    },
-    quiet: true
+    open: true
   },
   entry: [
-    '@babel/polyfill',
     'url-search-params-polyfill',
     'react-hot-loader/patch',
     './src/index.tsx'
   ],
   cache: true,
-  devtool: '#eval-source-map',
   resolve: {
     alias: {
       'react-dom': '@hot-loader/react-dom'
@@ -48,7 +40,6 @@ const config: webpack.Configuration = {
       inject: 'body',
       minify: false
     }),
-    new OpenBrowserPlugin({ url: 'http://localhost:23333' }),
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsPlugin()
   ]

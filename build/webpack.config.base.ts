@@ -1,7 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
-import ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-import SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import SimpleProgressWebpackPlugin from 'simple-progress-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 
 const config: webpack.Configuration = {
@@ -60,8 +60,7 @@ const config: webpack.Configuration = {
     new ESLintPlugin({
       extensions: ['ts', 'tsx']
     }),
-    // @ts-ignore
-    process.env.CI ? null : new SimpleProgressWebpackPlugin()
+    new SimpleProgressWebpackPlugin({})
   ].filter(Boolean)
 };
 
